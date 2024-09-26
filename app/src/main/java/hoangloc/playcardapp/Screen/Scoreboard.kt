@@ -1,6 +1,5 @@
-package hoangloc.playcardapp
+package hoangloc.playcardapp.Screen
 
-import android.view.Surface
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,11 +31,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import hoangloc.playcardapp.Entity.Player
+import hoangloc.playcardapp.ViewModel.PlayerViewModel
+import hoangloc.playcardapp.R
 
 @Composable
 fun Scoreboard(viewModel: PlayerViewModel) {
 
-    val PlayerList by viewModel.players.observeAsState()
+    val playerList by viewModel.plaList.observeAsState()
 
     var nameInput by remember {
         mutableStateOf("") }
@@ -71,7 +74,7 @@ fun Scoreboard(viewModel: PlayerViewModel) {
                Text(text = "Add")
            }
            //ScoreBoard
-            PlayerList?.let {
+            playerList?.let {
                 LazyColumn (
                     content = {
                         itemsIndexed(it){
@@ -101,19 +104,17 @@ fun PlayerItem(item: Player, onDelete: () -> Unit){
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .fillMaxWidth(1f)
+            .fillMaxWidth()
             .padding(10.dp)
             .background(MaterialTheme.colorScheme.inversePrimary)
-            .padding(5.dp)
     ) {
-        Text(text = item.id.toString())
         TextButton(onClick = {
             // add 1 point to player
-
-
-        }) {
+        },
+            modifier = Modifier.padding(2.dp).width(120.dp)
+        ) {
             Text(
-            modifier = Modifier.padding(10.dp),
+            //modifier = Modifier.padding(10.dp),
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
             style = MaterialTheme.typography.titleLarge,
             text = item.name)
@@ -122,7 +123,7 @@ fun PlayerItem(item: Player, onDelete: () -> Unit){
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
             text = item.winround.toString())
         Text(
-            modifier = Modifier.padding(10.dp),
+            //modifier = Modifier.padding(10.dp),
             fontWeight = FontWeight.SemiBold,
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
             text = item.points.toString())

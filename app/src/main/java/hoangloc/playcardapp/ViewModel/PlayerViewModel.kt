@@ -21,10 +21,27 @@ class PlayerViewModel: ViewModel() {
         }
     }
 
-
     fun deletePlayer(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             playerListDao.deletePlayer(id)
+        }
+    }
+
+    fun updatePoints(id: Int, points: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            playerListDao.updatePoints(id, points)
+        }
+    }
+
+    fun insWinround(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            playerListDao.insWinround(id)
+        }
+    }
+
+    fun decWinround(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            playerListDao.decWinround(id)
         }
     }
 }

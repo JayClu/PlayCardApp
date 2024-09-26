@@ -12,6 +12,6 @@ data class Player (
 
 
     var name: String = "",
-    var points: Long = 0,
+    var points: Int = 0,
     var winround: Int = 0
 )

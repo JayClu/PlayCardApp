@@ -1,5 +1,6 @@
 package hoangloc.playcardapp.Screen
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -81,8 +82,14 @@ fun Scoreboard(viewModel: PlayerViewModel) {
                                 index: Int, item: Player ->
                             PlayerItem(item = item,
                                 onDelete = {
-                                viewModel.deletePlayer(item.id)
-                            })
+                                    viewModel.deletePlayer(item.id)
+                                           },
+                                onIncrease = {
+                                    viewModel.insWinround(item.id)
+                                },
+                                onDecrease = {
+                                    viewModel.decWinround(item.id)
+                                })
                         }
                     }
                 )
@@ -99,7 +106,13 @@ fun Scoreboard(viewModel: PlayerViewModel) {
 
 
 @Composable
-fun PlayerItem(item: Player, onDelete: () -> Unit){
+fun PlayerItem(item: Player, onDelete: () -> Unit,
+                onIncrease: () -> Unit, onDecrease: () -> Unit){
+
+    var points by remember {
+        mutableStateOf(0)
+    }
+
     Row(
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically,
@@ -108,10 +121,12 @@ fun PlayerItem(item: Player, onDelete: () -> Unit){
             .padding(10.dp)
             .background(MaterialTheme.colorScheme.inversePrimary)
     ) {
-        TextButton(onClick = {
+        TextButton(onClick = onIncrease
             // add 1 point to player
-        },
-            modifier = Modifier.padding(2.dp).width(120.dp)
+            ,
+            modifier = Modifier
+                .padding(2.dp)
+                .width(120.dp)
         ) {
             Text(
             //modifier = Modifier.padding(10.dp),
@@ -119,9 +134,19 @@ fun PlayerItem(item: Player, onDelete: () -> Unit){
             style = MaterialTheme.typography.titleLarge,
             text = item.name)
         }
-        Text(
-            fontSize = MaterialTheme.typography.titleLarge.fontSize,
-            text = item.winround.toString())
+        TextButton(onClick = {
+            if (item.winround > 0) {
+                onDecrease()
+            }
+        }
+        )
+        {
+            Text(
+                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                text = item.winround.toString(),
+                //text = item.winround.toString()
+            )
+        }
         Text(
             //modifier = Modifier.padding(10.dp),
             fontWeight = FontWeight.SemiBold,

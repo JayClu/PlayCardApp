@@ -38,6 +38,20 @@ import hoangloc.playcardapp.ViewModel.PlayerViewModel
 import hoangloc.playcardapp.R
 import hoangloc.playcardapp.util.GetColor
 import hoangloc.playcardapp.util.computePoints
+import hoangloc.playcardapp.util.createBar
+
+
+@Composable
+fun mainPage(viewModel: PlayerViewModel){
+    Column (
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        createBar()
+        Scoreboard(viewModel)
+    }
+}
 
 @Composable
 fun Scoreboard(viewModel: PlayerViewModel) {

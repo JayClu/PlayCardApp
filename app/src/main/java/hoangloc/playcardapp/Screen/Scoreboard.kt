@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import hoangloc.playcardapp.Entity.Player
 import hoangloc.playcardapp.ViewModel.PlayerViewModel
 import hoangloc.playcardapp.R
+import hoangloc.playcardapp.util.GetColor
 import hoangloc.playcardapp.util.computePoints
 
 @Composable
@@ -166,6 +167,7 @@ fun PlayerItem(item: Player,onParentList: List<Player>, onDelete: () -> Unit,
             //modifier = Modifier.padding(10.dp),
             fontWeight = FontWeight.SemiBold,
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
+            color = GetColor(points),
             text = points.toString())
 
         //delete button

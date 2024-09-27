@@ -9,9 +9,9 @@ data class Player (
 
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
-
-
+    //
     var name: String = "",
     var points: Int = 0,
-    var winround: Int = 0
+    var winround: Int = 0,
+    //
 )

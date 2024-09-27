@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -35,18 +36,19 @@ import androidx.compose.ui.unit.dp
 import hoangloc.playcardapp.Entity.Player
 import hoangloc.playcardapp.ViewModel.PlayerViewModel
 import hoangloc.playcardapp.R
+import hoangloc.playcardapp.util.computePoints
 
 @Composable
 fun Scoreboard(viewModel: PlayerViewModel) {
 
-    val playerList by viewModel.plaList.observeAsState()
+    val playerList by viewModel.playList.observeAsState()
 
     var nameInput by remember {
         mutableStateOf("") }
 
    Surface (
        modifier = Modifier
-           .fillMaxWidth()
+           .fillMaxSize()
            .padding(top = 40.dp),
    ){
 
@@ -54,26 +56,29 @@ fun Scoreboard(viewModel: PlayerViewModel) {
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(10.dp),
-            verticalArrangement = Arrangement.Top
+            verticalArrangement = Arrangement.Top,
+           horizontalAlignment = Alignment.CenterHorizontally
         ) {
            //Input list
            OutlinedTextField(value = nameInput, onValueChange =
            {nameInput = it}
            )
 
-           //Add button
+                    //Add button
            Button(
                onClick = {
                    //add a  new once
                    viewModel.addPlayer(nameInput)
-                   nameInput = ""
-               },
+                   nameInput = "" },
                modifier = Modifier
                    .padding(10.dp)
                    .clip(RoundedCornerShape(10.dp))
-           ){
-               Text(text = "Add")
-           }
+                   .width(150.dp)
+                ) {
+                    Text(text = "Add")
+                }
+
+
            //ScoreBoard
             playerList?.let {
                 LazyColumn (
@@ -81,14 +86,24 @@ fun Scoreboard(viewModel: PlayerViewModel) {
                         itemsIndexed(it){
                                 index: Int, item: Player ->
                             PlayerItem(item = item,
+                                onParentList = it,
                                 onDelete = {
                                     viewModel.deletePlayer(item.id)
+                                   // viewModel.updatePlayer()
+                                    //update points
+                                    //viewModel.updatePoints(it)
                                            },
                                 onIncrease = {
                                     viewModel.insWinround(item.id)
+                                   // viewModel.updatePlayer()
+                                    //update points
+                                    //viewModel.updatePoints(it)
                                 },
                                 onDecrease = {
                                     viewModel.decWinround(item.id)
+                                    //viewModel.updatePlayer()
+                                    //update points
+                                    //viewModel.updatePoints(it)
                                 })
                         }
                     }
@@ -106,13 +121,13 @@ fun Scoreboard(viewModel: PlayerViewModel) {
 
 
 @Composable
-fun PlayerItem(item: Player, onDelete: () -> Unit,
+fun PlayerItem(item: Player,onParentList: List<Player>, onDelete: () -> Unit,
                 onIncrease: () -> Unit, onDecrease: () -> Unit){
 
     var points by remember {
         mutableStateOf(0)
     }
-
+    points= computePoints(item.id,onParentList)
     Row(
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically,
@@ -151,7 +166,7 @@ fun PlayerItem(item: Player, onDelete: () -> Unit,
             //modifier = Modifier.padding(10.dp),
             fontWeight = FontWeight.SemiBold,
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
-            text = item.points.toString())
+            text = points.toString())
 
         //delete button
         IconButton(onClick = onDelete
